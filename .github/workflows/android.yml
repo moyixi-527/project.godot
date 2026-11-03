@@ -13,7 +13,6 @@ jobs:
       - name: Setup Templates
         run: |
           mkdir -v -p ~/.local/share/godot/export_templates
-          # 关键修复：把模板从镜像的默认位置复制到正确的路径
           cp -R /root/.local/share/godot/export_templates/4.2.stable ~/.local/share/godot/export_templates/
 
       - name: Setup Keystore
@@ -26,6 +25,10 @@ jobs:
           godot --headless --editor --quit
 
       - name: Android Build
+        env:
+          GODOT_ANDROID_KEYSTORE_DEBUG_PATH: /root/.android/debug.keystore
+          GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
+          GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
         run: |
           mkdir -p build
           godot -v --headless --export-debug "Android" build/dafeiyu.apk
