@@ -10,6 +10,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Templates
+        run: |
+          mkdir -v -p ~/.local/share/godot/export_templates
+          # 关键修复：把模板从镜像的默认位置复制到正确的路径
+          cp -R /root/.local/share/godot/export_templates/4.2.stable ~/.local/share/godot/export_templates/
+
       - name: Setup Keystore
         run: |
           mkdir -p ~/.android
