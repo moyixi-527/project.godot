@@ -9,18 +9,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Godot
+
+      - name: Setup Keystore
         run: |
-          mkdir -v -p ~/.local/share/godot/export_templates
-          mv /root/.local/share/godot/export_templates/4.2.stable ~/.local/share/godot/export_templates/4.2.stable
+          mkdir -p ~/.android
+          keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore ~/.android/debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12
+
       - name: Import Project
         run: |
           godot --headless --editor --quit
+
       - name: Android Build
         run: |
-          mkdir -v -p build
+          mkdir -p build
           godot -v --headless --export-debug "Android" build/dafeiyu.apk
           ls -la build/
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
