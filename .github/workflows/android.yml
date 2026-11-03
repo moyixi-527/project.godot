@@ -9,16 +9,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup
+      - name: Setup Godot
         run: |
-          mkdir -v -p ~/.local/share/godot/templates
-          mv /root/.local/share/godot/templates/4.2.stable ~/.local/share/godot/templates/4.2.stable
+          mkdir -v -p ~/.local/share/godot/export_templates
+          mv /root/.local/share/godot/export_templates/4.2.stable ~/.local/share/godot/export_templates/4.2.stable
+      - name: Import Project
+        run: |
+          godot --headless --editor --quit
       - name: Android Build
         run: |
           mkdir -v -p build
           godot -v --headless --export-debug "Android" build/dafeiyu.apk
+          ls -la build/
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Dafeiyu-APK
           path: build/dafeiyu.apk
+          if-no-files-found: error
